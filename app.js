@@ -26,10 +26,14 @@ const portalData = [
         icon: "fa-laptop-code",
         links: [
             {
-                title: "Electrical Machines",
+                title: "Electrical Machines by Mai",
                 url: "https://machines.tiiny.site/",
                 icon: "fa-bolt",
                 description: "แบบทดสอบ กว. กลางภาค (ถึงข้อที่ 220)"
+                title: "Electrical Machines by king sag",
+                url: "https://fuk-machine.vercel.app/",
+                icon: "fa-miacrochip",
+                description: "แบบทดสอบ กว. กลางภาค "
             }
             // Add more Term 3 links here...
         ]
