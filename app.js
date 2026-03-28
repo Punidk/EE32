@@ -39,7 +39,7 @@ const portalData = [
         links: [
             {
                 title: "Electrical Machines by Mai",
-                url: "https://machines.tiiny.site/",
+                url: "./electrical_machines_quiz/index.html",
                 icon: "fa-bolt",
                 description: "แบบทดสอบ กว. กลางภาค (ถึงข้อที่ 220)"
             },

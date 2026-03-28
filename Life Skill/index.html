@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Skill Quiz - ตรรกะและการใช้เหตุผล</title>
+    <style>
+        body { font-family: 'Sarabun', sans-serif; background-color: #f0f8ff; color: #333; padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
+        h3 { text-align: center; color: #7f8c8d; margin-top: 0; }
+        .setup-box { background: #e8f6f3; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+        select, input { padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #bdc3c7; margin: 10px 0; }
+        .question-box { margin-bottom: 25px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #fafafa; }
+        .question-text { font-weight: bold; font-size: 18px; margin-bottom: 15px; color: #2980b9; }
+        .option-label { display: block; background: #fff; border: 1px solid #ccc; padding: 10px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; transition: 0.2s; }
+        .option-label:hover { background: #f1f2f6; }
+        input[type="radio"] { margin-right: 10px; transform: scale(1.2); cursor: pointer; }
+        .btn { display: inline-block; width: 100%; padding: 15px; margin: 10px 0; background-color: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; transition: 0.3s; }
+        .btn:hover { background-color: #2980b9; }
+        .btn-success { background-color: #27ae60; }
+        .btn-success:hover { background-color: #219150; }
+        .btn-danger { background-color: #e74c3c; }
+        .btn-danger:hover { background-color: #c0392b; }
+        #result { text-align: center; font-size: 24px; font-weight: bold; margin-top: 20px; color: #27ae60; padding: 20px; background: #eafaf1; border-radius: 8px; }
+        .hidden { display: none; }
+        .feedback { font-size: 15px; margin-top: 10px; padding: 10px; border-radius: 5px; display: none; line-height: 1.4; }
+        .feedback.correct { background: #d4efdf; color: #1e8449; display: block; }
+        .feedback.wrong { background: #fadbd8; color: #c0392b; display: block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📝 ทบทวนรายวิชา Life Skill โดยสุดหล่อไพโรจน์</h1>
+    <h3>เรื่อง: ตรรกะและการใช้เหตุผล (เนื้อหา 3/68 นะ หรือ69วะ คือทำตอนอยู่เทอม 3 ปี 69 อะ) ข้อไหนเฉลยผิดแคปมาท้วง เพราะคนทำไม่ได้เข้าเรียน55449451446456  Quiz ( https://drive.google.com/file/d/1aPnDGTHtF8HB7WnidB2jxXMiRnbYA4Os/view?usp=drivesdk ) ก้อปลิ้งนี้ไปวาง มีกลางภาคทุกควิซแต่มีบางข้อผิดนะ แก้เอา </h3>
+    
+    <div id="setup-container" class="setup-box">
+        <p><b>เลือกบทเรียนที่คุณต้องการทบทวน</b><br>(ระบบจะสุ่มคำถามมาให้สูงสุด 30 ข้อต่อการทำ 1 ครั้งเพื่อไม่ให้เหนื่อยเกินไป)</p>
+        <select id="chapter-select">
+            <option value="all">📚 รวมทุกบท (สุ่ม 30 ข้อจากทั้งหมด 82 ข้อ)</option>
+            <option value="ch2">บทที่ 2: การคิดเชิงตรรกะ (20 ข้อ)</option>
+            <option value="ch3">บทที่ 3: การอ้างเหตุผลแบบนิรนัย (13 ข้อ)</option>
+            <option value="ch4">บทที่ 4: ตรรกะวิทยาประพจน์ (10 ข้อ)</option>
+            <option value="ch5">บทที่ 5: Logical fallacies (33 ข้อ)</option>
+            <option value="ch6">บทที่ 6: ความรู้กับสังคม (6 ข้อ)</option>
+        </select>
+        <br>
+        <button class="btn" onclick="startQuiz()">🚀 เริ่มทำข้อสอบ</button>
+    </div>
+
+    <div id="quiz-container" class="hidden">
+        <div id="questions-area"></div>
+        <button id="submit-btn" class="btn btn-success" onclick="checkAnswers()">ส่งคำตอบเพื่อตรวจคะแนน</button>
+    </div>
+
+    <div id="result" class="hidden"></div>
+    <button id="reload-btn" class="btn btn-danger hidden" onclick="location.reload()">🔄 เลือกบท / เริ่มทำข้อสอบชุดใหม่</button>
+</div>
+
+<script>
+    // ฐานข้อมูลข้อสอบ 82 ข้อ ครบถ้วนตามสรุป 100%
+    const quizDatabase = {
+        ch2: [
+            { q: "ตรรกะคือการใช้เหตุผลอย่างมีแบบแผนที่สามารถนำมาใช้ประเมินได้ว่าเหตุผลนั้นดีหรือไม่ดี", ans: "จริง", exp: "ตรรกะหรือการใช้เหตุผลอย่างมีแบบแผน ใช้ปรเมินเหตุผลได้ว่าดีหรือไม่ดี [cite: 2]" },
+            { q: "เหตุผลไม่ใช่รูปแบบหนึ่งของความคิด แต่เป็นการกระทำทางกายภาพ", ans: "เท็จ", exp: "เหตุผลเป็นความคิดรูปแบบหนึ่ง [cite: 3]" },
+            { q: "การคิดและการใช้เหตุผลเป็นสิ่งเดียวกันและสามารถใช้คำสองคำนี้แทนกันได้", ans: "เท็จ", exp: "การคิดและการใช้เหตุผลไม่ใช่สิ่งเดียวกัน [cite: 4]" },
+            { q: "การใช้เหตุผลจำเป็นต้องมีการแสดงความคิดผ่านภาษาและมีการอนุมานเกิดขึ้นเสมอ", ans: "จริง", exp: "การใช้เหตุผลคือการแสดงความคิดและภาษา มีการอนุมาน [cite: 5]" },
+            { q: "ความคิดคือสภาวะจิตที่แสดงออกผ่านภาษาหรือสัญลักษณ์", ans: "จริง", exp: "ความคิด คือสภาวะจิตโดยแสดงออกผ่านภาษา หรือสัญลักษณ์ [cite: 6]" },
+            { q: "ทุกความคิดไม่จำเป็นต้องมีเนื้อหาก็ได้ ขอแค่มีภาษาในการนำเสนอ", ans: "เท็จ", exp: "ภาษาคือการเสนอความคิด และทุกความคิดต้องมีเนื้อหา [cite: 7]" },
+            { q: "ความคิดแบบนามธรรมจำเป็นต้องเชื่อมโยงกับโลกความเป็นจริงเสมอ", ans: "เท็จ", exp: "ความคิดแบบนามธรรมอาจไม่เชื่อมโยงกับโลก และความคิดเห็นจะพูดถึงโลกหรือไม่ก็ได้ [cite: 8]" },
+            { q: "การบรรยาย พรรณนา และการชวนเชื่อ จัดเป็นการใช้ภาษาที่เกี่ยวข้องกับการอ้างเหตุผล", ans: "เท็จ", exp: "ภาษาที่ไม่เกี่ยวข้องกับการใช้เหตุผล คือ การบรรยาย พรรณา อธิบาย การชวนเชื่อ เพราะอนุมานไม่ได้และไม่มีข้อสรุป [cite: 9]" },
+            { q: "ข้อความหรือประพจน์ จะต้องประกอบไปด้วยภาคประธานและภาคแสดง", ans: "จริง", exp: "ข้อความหรือประพจน์ประกอบไปด้วย ภาคประธาน + ภาคแสดง [cite: 10]" },
+            { q: "การอนุมานและการแสดงค่าความจริง จำเป็นจะต้องเขียนออกมาในรูปของประโยคเสมอ", ans: "เท็จ", exp: "การอนุมานและแสดงค่าความจริง ไม่จำเป็นต้องเป็นประโยค [cite: 11]" },
+            { q: "ประโยคที่เขียนต่างกัน ไม่สามารถสื่อถึงประพจน์เดียวกันได้", ans: "เท็จ", exp: "ประโยคที่คล้ายกันอาจเขียนต่างกันได้แต่ต้องมีประพจน์เดียวกัน [cite: 12]" },
+            { q: "Copi's discourse ประกอบด้วย 3 รูปแบบคือ information, expression และ directive", ans: "จริง", exp: "Copi's discourse มี 3 แบบ 1 information 2 expression 3 directive [cite: 13]" },
+            { q: "'สาเหตุ' สามารถนำมาอ้างเป็นเหตุผลได้เพราะมีข้อสรุปในตัวเอง", ans: "เท็จ", exp: "'สาเหตุ' ไม่มีข้อสรุป และนำมาอ้างเป็นเหตุผลไม่ได้ [cite: 14]" },
+            { q: "การอ้างเหตุผลที่สมบูรณ์ต้องประกอบด้วยข้ออ้างและข้อสรุป", ans: "จริง", exp: "การอ้างเหตุผลประกอบด้วย ข้ออ้าง ข้อสรุป [cite: 15]" },
+            { q: "เหตุผลสามารถอยู่ในรูปของประโยคคำถามหรือประโยคคำสั่งก็ได้", ans: "เท็จ", exp: "เหตุผลต้องเป็นประโยคบอกเล่าเท่านั้น [cite: 16]" },
+            { q: "การอ้างเหตุผลจะไม่สมบูรณ์หากขาดข้อสรุป", ans: "จริง", exp: "ถ้าขาดข้อสรุปการอ้างเหตุผลจะไม่สมบูรณ์ [cite: 17]" },
+            { q: "ข้อความที่อยู่หลังคำว่า 'เพราะว่า' มักจะทำหน้าที่เป็นข้อสรุปเสมอ", ans: "เท็จ", exp: "ข้อความหลัง 'เพราะว่า' เป็นข้ออ้างเสมอ [cite: 18]" },
+            { q: "หากเราตัดข้อความด้านหลังคำว่า 'เพราะว่า' ออก การอ้างเหตุผลนั้นจะกลายเป็นเพียงข้อเท็จจริง", ans: "จริง", exp: "ถ้าตัดข้อความด้านหลังคำว่า 'เพราะว่า' ออก การอ้างเหตุผลนั้นจะกลายเป็นข้อเท็จจริง [cite: 19]" },
+            { q: "การประเมินความคิดหรือ Critical thinking สามารถนำไปสู่การสร้างวิจารณญาณและนวัตกรรมใหม่ๆ ได้", ans: "จริง", exp: "Critical thinking การประเมินความคิดทำให้เกิดวิจารณญาณ และสร้างนวัตกรรมใหม่ๆได้ [cite: 20]" },
+            { q: "Critical thinking หรือ การคิดเชิงวิพากษ์ ถือเป็นสภาวะความคิดลำดับแรกที่เกิดขึ้นเมื่อรับรู้ข้อมูล", ans: "เท็จ", exp: "Critical thinking หรือ การคิดเชิงวพากษ์ เป็นความคิดลำดับที่สอง [cite: 21]" }
+        ],
+        ch3: [
+            { q: "การอ้างเหตุผลแบบจัดประเภท แบ่งออกเป็น 4 เทอม", ans: "เท็จ", exp: "การอ้างเหตุผลแบบจัดประเภทแบ่งออกเป็น 3 เทอม [cite: 23]" },
+            { q: "โครงสร้างของการอ้างเหตุผลแบบจัดประเภทประกอบไปด้วย 2 ข้ออ้าง และ 1 ข้อสรุป", ans: "จริง", exp: "การอ้างเหตุผลแบบจัดประเภทประกอบไปด้วย 2 ข้ออ้าง 1 ข้อสรุป [cite: 24]" },
+            { q: "การอ้างเหตุผลแบบจัดประเภทถือเป็นการอ้างเหตุผลที่มีความซับซ้อนมากที่สุด", ans: "เท็จ", exp: "การอ้างเหตุผลแบบจัดประเภทมีความซับซ้อนน้อยที่สุด [cite: 25]" },
+            { q: "ประพจน์รูปแบบ A คือเห็นด้วยทั้งหมด, E คือปฏิเสธทั้งหมด, I คือเห็นด้วยบางส่วน, O คือปฏิเสธบางส่วน", ans: "จริง", exp: "การอ้างเหตุผลแบบจัดประเภทประกอบไปด้วย A(เห็นด้วยทั้งหมด) E(ปฏิเสธทั้งหมด) (เห็นด้วยบางส่วน) O(ปฏิเสธบางส่วน) [cite: 26]" },
+            { q: "Minor term คือภาคประธานของประพจน์ข้อสรุป ส่วน Major term คือภาคแสดงของประพจน์ข้อสรุป", ans: "จริง", exp: "Major term - ภาคแสดงของประพจน์ข้อสรุป, Minor term - ภาคประธานของประพจน์ข้อสรุป [cite: 27]" },
+            { q: "เทอมกลาง (Middle term) จะต้องปรากฏอยู่ในประพจน์ที่เป็นข้อสรุปเสมอ", ans: "เท็จ", exp: "Middle term - ไม่อยู่ในประพจน์ข้อสรุป [cite: 27]" },
+            { q: "เทอมกลางที่เป็นข้ออ้าง ต้องกระจายหรือระบุทุกสมาชิกอย่างน้อย 1 ครั้ง", ans: "จริง", exp: "เทอมกลาง(ที่เป็นข้ออ้าง) ต้องกระจายหรือระบุทุกสมาชิกอย่างน้อย 1 ครั้ง [cite: 28]" },
+            { q: "เทอมใดที่กระจายในข้ออ้าง ไม่จำเป็นต้องกระจายในข้อสรุปก็ได้", ans: "เท็จ", exp: "เทอมที่กระจายในข้ออ้างต้องกระจายในข้อสรุปด้วย [cite: 29]" },
+            { q: "กฎของการอ้างเหตุผลระบุว่า ห้ามมีข้ออ้างที่เป็นการปฏิเสธ (E) สองข้อพร้อมกัน", ans: "จริง", exp: "ข้ออ้างห้ามปฏิเสธ 2 ข้อ (ห้ามเป็น E สองข้อ) [cite: 30]" },
+            { q: "การอ้างเหตุผลแบบนิรนัยแบบจัดประเภท จะสมเหตุสมผลได้ก็ต่อเมื่อเป็นจริงตามข้ออ้าง", ans: "จริง", exp: "การอ้างเหตุผลแบบนิรนัยแบบจัดประเภทต้องเป็นจริงตามข้ออ้างถึงจะสมเหตุสมผล [cite: 31]" },
+            { q: "หากข้อสรุปไม่สอดคล้องกับความจริง การอ้างเหตุผลนั้นจะถือว่าไม่สมเหตุสมผลทันที", ans: "เท็จ", exp: "ถ้าข้อสรุปไม่สอดคล้องกับความจริง การอ้างเหตุผลนั้นอาจจะสมเหตุสมผลได้ แต่ไม่สมบูรณ์ [cite: 32]" },
+            { q: "การอ้างเหตุผลแบบนิรนัย คือการสรุปความจากข้ออ้างที่เป็นจริง", ans: "จริง", exp: "การอ้างเหตุผลแบบอุปนัย ต่างจากนิรนัยคือ นิรนัยเป็นการสรุปจากข้ออ้างที่เป็นจริง [cite: 33]" },
+            { q: "การอ้างเหตุผลแบบอุปนัย คือการทำนายและใช้สถิติจากเหตุการณ์ในอดีต", ans: "จริง", exp: "การอ้างเหตุผลแบบอุปนัย คือการทำนายและใช้สถิติจากเหตุการณ์ในอดีต [cite: 34]" }
+        ],
+        ch4: [
+            { q: "ประพจน์และประโยคในภาษาคือสิ่งเดียวกันทุกประการ", ans: "เท็จ", exp: "ประพจน์ไม่ใช่ประโยคในภาษา [cite: 36]" },
+            { q: "ประโยคปฏิเสธไม่ถือว่าเป็นประพจน์ เพราะไม่ได้นำเสนอข้อเท็จจริง", ans: "เท็จ", exp: "ประโยคบอกเล่า และประโยคปฏิเสธเป็นประพจน์เพราะบอกค่าความจริงได้ [cite: 37]" },
+            { q: "ประโยคคำสั่ง ขอร้อง และคำถาม ไม่จัดว่าเป็นประพจน์", ans: "จริง", exp: "ประโยคคำสั่ง ขอร้อง คำถามไม่เป็นประพจน์ [cite: 38]" },
+            { q: "ตรรกะวิทยาประพจน์จำเป็นต้องอาศัยรูปแบบ AEIO และแผนภาพเวนน์เสมอ", ans: "เท็จ", exp: "ตรรกะวิทยาประพจน์ไม่จำเป็นต้องมี AEIO และแผนภาพเวนน์ [cite: 39]" },
+            { q: "การเปลี่ยนค่าความจริงของประพจน์ใดประพจน์หนึ่ง จะส่งผลทำให้ข้อสรุปเปลี่ยนไปด้วย", ans: "จริง", exp: "การเปลี่ยนค่าความจริงหรือประพจน์ทำให้ข้อสรุปเปลี่ยน [cite: 40]" },
+            { q: "จำนวนของประพจน์ที่มีอยู่ในการอ้างเหตุผล เป็นตัวชี้วัดที่ใช้กำหนดความสมเหตุสมผล", ans: "เท็จ", exp: "จำนวนของประพจน์ไม่ได้กำหนดความสมเหตุสมผล [cite: 41]" },
+            { q: "ภาษาพูดมีรูปแบบที่ตายตัวกว่าการใช้สัญลักษณ์ทางตรรกะวิทยา", ans: "เท็จ", exp: "ภาษาพูดมีได้หลายแบบ แต่สัญลักษณ์มีรูปแบบที่ตายตัว [cite: 42]" },
+            { q: "Argument ที่ไม่เป็นไปตามรูปแบบ Modus Ponen หรือ Modus tollen จะไม่สมเหตุสมผล", ans: "จริง", exp: "Argument ที่ไม่เป็นไปตาม Modus Ponen, Modus tollen จะไม่สมเหตุสมผล [cite: 43]" },
+            { q: "Hypothetical syllogism ประกอบด้วยประพจน์ 3 ประพจน์ ส่วนแบบ AEIO มีเพียง 1 ประพจน์", ans: "จริง", exp: "hypothethical syllogism มี 3 ประพจน์ แต่แบบ AEIO มี 1 ประพจน์ [cite: 44]" },
+            { q: "Disjunctive syllogism เป็นรูปแบบการอ้างเหตุผลที่มีข้อสรุปเป็นประเภทเดียวกับข้ออ้างเสมอ", ans: "เท็จ", exp: "disjunctive syllogism ข้อสรุปไม่เป็นประเถทเดียวกับข้ออ้าง [cite: 45]" }
+        ],
+        ch5: [
+            { q: "ตรรกะวิบัติไม่เป็นแบบแผน แบ่งได้เป็น Relevence, Presumption, Ambiguity และ Defective induction", ans: "จริง", exp: "ตรรกะวิบัติไม่เป็นแบบแผน แบ่งได้เป็น Relevence, Presumption, Ambiguity, Defective induction [cite: 47]" },
+            { q: "ตรรกะวิบัติหมวด Relevence เกิดจากข้ออ้างกับข้อสรุปไม่เกี่ยวข้องกัน และเป็นรูปแบบที่พบได้มากที่สุด", ans: "จริง", exp: "Relevence -ออ้าง ข้อสรุป ไม่เกี่ยวข้องกัน พบมากที่สุด [cite: 48]" },
+            { q: "ประโยค 'เคยลอกงานครั้งนี้ต้องได้ลอกอีก' จัดเป็นตรรกะวิบัติประเภท Ad populum", ans: "จริง", exp: "Ad populum อ้างจำนวน (เคยลอกงานครั้งนี้ต้องได้ลอกอีก) [cite: 49]" },
+            { q: "ประโยค 'ขอลอกงานหน่อย ถือว่าสงสารกัน' เป็นตรรกะวิบัติแบบ Red herring ที่ใช้เบี่ยงประเด็น", ans: "เท็จ", exp: "เป็นตรรกะวิบัติแบบ Emotion อ้างอารมณ์ (ขอลอกงานหน่อย ถือว่าสงสารกัน) [cite: 50]" },
+            { q: "การพูดว่า 'โลกร้อนไม่น่าสนใจ เรามีปัญหาการเมืองอยู่' เป็นการใช้ตรรกะวิบัติแบบ Red herring", ans: "จริง", exp: "Red herring นอกประเด็น (โลกร้อนไม่น่าสนใจ เรามีปัญหาการเมืองอยู่) [cite: 51]" },
+            { q: "ตรรกะวิบัติแบบ Strawman คือการนำประเด็นมาทำให้เป็นเรื่องง่ายๆ เช่น 'e-sport ก็แค่พวกติดเกมไปวันๆ'", ans: "จริง", exp: "Strawman ทำให้เป็นเรื่องง่ายๆ (e-sport ก็แค่พวกติดเกมไปวันๆ ) [cite: 52]" },
+            { q: "การแย้งว่า 'ไอ้นี่เรียนไม่เก่งหรอก มันอ้วน' เป็นตัวอย่างของ Ad hominem ที่โจมตีตัวบุคคล", ans: "จริง", exp: "Ad hominem แย้งบุคคล (ไอ้นี่เรียนไม่เก่งหรอก มันอ้วน ) [cite: 53]" },
+            { q: "ประโยค 'ใครว่าผมพูดผิด ผมหักคะแนนนะ' เป็นตรรกะวิบัติแบบ Ad Verecudiam", ans: "เท็จ", exp: "เป็นตรรกะวิบัติแบบ Ad baculum ใช้อำนาจ (ใครว่าผมพูดผิด ผมหักคะแนนนะ ) [cite: 54]" },
+            { q: "ตรรกะวิบัติหมวด Presumption เกิดจากการที่ข้ออ้างมีประเด็นและให้ข้อมูลไม่พอ", ans: "จริง", exp: "Presumption ข้ออ้างไม่พอ ข้ออ้างมีประเด็น [cite: 55]" },
+            { q: "ตรรกะวิบัติแบบ Accident ไม่มีความเกี่ยวข้องกับรูปแบบ Hypothetical ในตรรกะวิทยาบทที่ 4", ans: "เท็จ", exp: "Accident = hypothetic ในบทที่ 4 [cite: 56]" },
+            { q: "การคิดไปเองว่า 'ไอ้นนี้น่าจะรวยจัด เห็นกินของหรู' เป็นตรรกะวิบัติแบบ Complex (Plurium) สมมติฐานนำ", ans: "จริง", exp: "Complex (Plurium) สมมติฐานนำ (ไอ้นนี้น่าจะรวยจัด เห็นกินของหรู) [cite: 57]" },
+            { q: "ประโยค 'จำได้หมดกูทำได้แน่ๆ' เป็นตรรกะวิบัติแบบ Begging (Petitto) หรือยืนยันไว้ก่อน", ans: "จริง", exp: "Begging (Petitto) ยืนยันไว้ก่อน (จำได้หมดกูทำได้แน่ๆ ) [cite: 58]" },
+            { q: "หมวด Ambiguity คือตรรกะวิบัติที่เกิดจากความคลุมเครือ", ans: "จริง", exp: "Ambiguity คลุมเคลือ [cite: 59]" },
+            { q: "การสับสนความหมายของคำว่า 'หมูเด้ง' ระหว่างสัตว์กับอาหาร เป็นตรรกะวิบัติแบบ Equivocation", ans: "จริง", exp: "Equivocation สับสน (หมูเด้งน่ารักมาก(หมูเด้งคือสัตว์อาจจะสับสนกับอาหาร)) [cite: 60, 61]" },
+            { q: "Division ถูกจัดอยู่ในตรรกะวิบัติหมวด Defective induction", ans: "เท็จ", exp: "Division จัดอยู่ในหมวด Ambiguity (A5 Division) [cite: 65]" },
+            { q: "Defective induction คือตรรกะวิบัติประเภทอุปนัยบกพร่อง ซึ่งมีสาเหตุไม่สมบูรณ์", ans: "จริง", exp: "Defective induction อุปนัยบกพร่อง สาเหตุไม่สมบูรณ์ [cite: 66]" },
+            { q: "การให้เหตุผลว่า 'ไม่รู้แต่น่าจะจริงนะ' เป็นตรรกะวิบัติประเภท Ad ignorance", ans: "จริง", exp: "Ad ignorance อ้างความไม่รู้ (ไม่รู้แต่น่าจะจริงนะ) [cite: 67]" },
+            { q: "การอ้างความรู้ของผู้เชี่ยวชาญ เรียกว่าตรรกะวิบัติแบบ Ad Verecudiam", ans: "จริง", exp: "Ad Verecudiam อ้างความรู้ของผู้เชี่ยวชาญ [cite: 68]" },
+            { q: "แนวคิดแบบ Slippery Slope เช่น 'สอบอีกก็ตกอีก' จัดเป็นตรรกะวิบัติฐาน False cause", ans: "จริง", exp: "False cause ประกอบด้วย 1.Slippery Slope คิดแง่ลบ (สอบอีกก็ตกอีก) [cite: 69]" },
+            { q: "เหตุการณ์ 'ถ้าไปกินก๋วยเตี๋ยววันพุธแล้วยางรถชอบแตก' เป็นตัวอย่างของ Post hoc", ans: "จริง", exp: "Post hoc มีสาเหตุของเหตุการเกิดขึ้น (ถ้าไปกินก๋วยเตี๋ยววันพุธแล้วยางรถชอบแตก) [cite: 69, 70]" },
+            { q: "การเหมารวมจากข้อมูลเพียงหยิบมือ เรียกว่าตรรกะวิบัติประเภท Hasty", ans: "จริง", exp: "Hasty เหมารวม [cite: 71]" },
+            { q: "การเชื่อคำทำนายที่ตรงกับข้อมูลเดิม เป็นความลำเอียงแบบ Confirm bias", ans: "จริง", exp: "Confirm bias เชื่อข้อมูลเดิม (เชื่อคำทำนาย ) [cite: 73]" },
+            { q: "Anchoring bias คือความเชื่อว่าข้อมูลแรกหรือข้อมูลเดิมนั้นถูกเสมอ", ans: "จริง", exp: "Anchoring bias ข้อมูลถูกเสมอ [cite: 74]" },
+            { q: "การเห็นข่าวเครื่องบินตกแล้วคิดว่าการขึ้นเครื่องบินอันตรายแน่นอน คือ Hind Sight bias", ans: "เท็จ", exp: "เป็นอคติแบบ Availability Heuristic (มีข่าวเครื่องบินตก แสดงว่าการขึ้นเครื่องบินอันตรายแน่นอน ) [cite: 75]" },
+            { q: "อคติแบบ Hind Sight bias ปรากฏในลักษณะคำพูดว่า 'กูว่าแล้วมันต้องจบแบบนี้'", ans: "จริง", exp: "Hind Sight bias (กูว่าแล้วมันต้องจบแบบนี้) [cite: 76]" },
+            { q: "การคิดว่า 'ไม่อ่านก็สอบผ่าน' เป็นตัวอย่างของความลำเอียงแบบ Overconfident", ans: "จริง", exp: "Overconfident มั่นใจ (ไม่อ่านก็สอบผ่าน) [cite: 77]" },
+            { q: "ปัญหาการคิดเป็นกลุ่ม (Group Think) คือปัจจัยทางจิตวิทยาที่การรวมกลุ่มมีผลต่อการตัดสินใจและการใช้เหตุผล", ans: "จริง", exp: "ปัญหาการคิดเป็นกลุ่มคือปัจจัยทางจิตวิทยาที่การรวมกลุ่มมีผลต่อการตัดสินใจและการใช้เหตุผล [cite: 79]" },
+            { q: "การลดทอนความคิดที่แตกต่างของคนในกลุ่ม เรียกว่า Suppression of dissenting viewpoints", ans: "จริง", exp: "Suppression of dissenting viewpoints. กดขี่ หรือลดทอนความคิดที่แตกต่าง [cite: 81]" },
+            { q: "การยกย่องอำนาจกลุ่มตนเองและมองว่าเป็นสังคมมิตรภาพที่มีข้อดี เรียกว่า Overestimation of the group's power and morality", ans: "จริง", exp: "Overestimation of the group's power and morality. ยกย่องอำนาจหรือให้สถานะของสังคมและกลุ่มของตัวเองว่ามีข้อดี [cite: 82]" },
+            { q: "การพยายามอธิบายว่าการตัดสินใจของกลุ่มเป็นสิ่งที่ถูกต้องและยอมรับได้ แม้สิ่งนั้นจะผิดจริยธรรม เรียกว่า Rationalization of decisions", ans: "จริง", exp: "Rationalization of decisions... พยายามอธิบายว่าการตัดสินใจของกลุ่มเป็นสิ่งที่ถูกต้อง ยอมรับได้แม้ว่า สิ่งนั้น... หรือผิดจริยธรรม [cite: 83]" },
+            { q: "อาการ Illusion of Invulnerability คือการหลงคิดว่าความคิดแบบกลุ่มเป็นสิ่งที่ถูกต้อง ไร้พ่าย และนำไปสู่ผลดีเสมอ", ans: "จริง", exp: "Illusion of Invulnerability: หลงคิดว่าความคิดแบบกลุ่มเป็นสิ่งที่ถูกต้อง ไร้พ่าย และการรวมกลุ่มนำไปสู่ผลดีเสมอ [cite: 85]" },
+            { q: "Collective Rationalization คือลักษณะที่กลุ่มรับฟังผลด้านลบของการตัดสินใจเพื่อนำมาปรับปรุง", ans: "เท็จ", exp: "Collective Rationalization: ยึดความเป็นเหตุผลร่วมกัน ลักษณะนี้ทำให้ไม่เกิดการรับฟังผลด้านลบของการตัดสินใจ [cite: 86]" },
+            { q: "Belief in Inherent Morality คือความเชื่อที่ว่าความถูกต้องของกลุ่มเป็นสิ่งที่ตกทอดมา สิ่งที่กลุ่มคิดย่อมดีเสมอ", ans: "จริง", exp: "Belief in Inherent Morality: ความถูกต้องของความคิดเป็นกลุ่มเป็นสิ่งที่ตกทอดมาและเกิดขึ้นเองอยู่แล้ว สิ่งที่กลุ่มคิดเป็นสิ่งที่ดีเสมอ [cite: 87]" },
+            { q: "การรีบตัดสินและสร้างลักษณะศัตรูขึ้นมา เช่น 'สามกีบ' หรือ 'สลิ่ม' จัดเป็นอาการ Stereotyping Outsiders", ans: "จริง", exp: "Stereotyping Outsiders: การรีบตัดสินฝ่ายตรงข้าม หรือสร้างลักษณะของศัตรูขึ้นมา [cite: 88]" },
+            { q: "การมองคนที่วิจารณ์กลุ่มว่าเป็นพวกไม่รักชาติ เป็นตัวอย่างของอาการ Group Think", ans: "จริง", exp: "Example: Treating critics of the invasion plan as unpatriotic or uninformed. [cite: 89]" }
+        ],
+        ch6: [
+            { q: "พื้นฐานความรู้ คือความสามารถในการแยกแยะข้อเท็จจริงออกจากข้อคิดเห็น", ans: "จริง", exp: "พื้นฐานความรู้ คือการแยกแยะข้อเท็จจริงและข้อคิดเห็น [cite: 91]" },
+            { q: "ความรู้ถือเป็นกิจกรรมทางปัญญาของกลุ่มคน โดยไม่เกี่ยวข้องกับความคิดของผู้อ้างความรู้", ans: "เท็จ", exp: "ความรู้คือกิจกรรมทางปัญญาของปัจเจก โดยความรู้ต้องเกิดจากความคิดของผู้อ้างความรู้ [cite: 92]" },
+            { q: "ความรู้ไม่จำเป็นต้องเป็นความจริงเสมอไป ขอเพียงเป็นสิ่งที่ได้รับการยอมรับ", ans: "เท็จ", exp: "ความรู้ต้องเป็นความจริง [cite: 93]" },
+            { q: "Aristotle แบ่งความรู้ออกเป็น techne และ Episteme", ans: "จริง", exp: "Aristotle แบ่งความรู้ออกเป็น techne Episteme [cite: 94]" },
+            { q: "Luciano Floridi ให้นิยามสารสนเทศว่าเป็นเพียงข้อมูลดิบที่ยังไม่ถูกจัดประเภท", ans: "เท็จ", exp: "Luciano Floridi ให้นิยามสารสนเทศว่าเป็นข้อมูลที่ถูกจัดประเภท และประมวลผลแล้ว [cite: 95]" },
+            { q: "Misinformation คือการตั้งใจสื่อสารให้เป็นเท็จเพื่อหลอกลวงผู้อื่น", ans: "เท็จ", exp: "Misinformation คือการสื่อสารที่ไม่สมบูรณ์ ส่วน Disinformation คือการตั้งใจสื่อสารให้เป็นเท็จ [cite: 96]" }
+        ]
+    };
+
+    let selectedQuestions = [];
+
+    function startQuiz() {
+        const selectedChapter = document.getElementById("chapter-select").value;
+        let pool = [];
+
+        if (selectedChapter === "all") {
+            pool = [...quizDatabase.ch2, ...quizDatabase.ch3, ...quizDatabase.ch4, ...quizDatabase.ch5, ...quizDatabase.ch6];
+        } else {
+            pool = [...quizDatabase[selectedChapter]];
+        }
+
+        // สับเปลี่ยนลำดับคำถามทั้งหมด
+        let shuffled = pool.sort(() => 0.5 - Math.random());
+        
+        // สุ่มมา 30 ข้อ เพื่อไม่ให้ผู้ทำเหนื่อยเกินไป (ถ้ามีไม่ถึง 30 ก็เอาเท่าที่มี)
+        selectedQuestions = shuffled.slice(0, 30);
+        
+        let quizHtml = "";
+        selectedQuestions.forEach((item, index) => {
+            quizHtml += `
+                <div class="question-box" id="qbox-${index}">
+                    <div class="question-text">${index + 1}. ${item.q}</div>
+                    <label class="option-label"><input type="radio" name="q${index}" value="จริง"> จริง</label>
+                    <label class="option-label"><input type="radio" name="q${index}" value="เท็จ"> เท็จ</label>
+                    <div id="feedback-${index}" class="feedback"></div>
+                </div>
+            `;
+        });
+
+        document.getElementById("questions-area").innerHTML = quizHtml;
+        document.getElementById("setup-container").classList.add("hidden");
+        document.getElementById("quiz-container").classList.remove("hidden");
+        window.scrollTo(0, 0);
+    }
+
+    function checkAnswers() {
+        let score = 0;
+        
+        selectedQuestions.forEach((item, index) => {
+            let selected = document.querySelector(`input[name="q${index}"]:checked`);
+            let feedbackDiv = document.getElementById(`feedback-${index}`);
+            
+            if (selected) {
+                if (selected.value === item.ans) {
+                    score++;
+                    feedbackDiv.innerHTML = `✅ <b>ถูกต้อง!</b><br>อธิบาย: ${item.exp}`;
+                    feedbackDiv.className = "feedback correct";
+                } else {
+                    feedbackDiv.innerHTML = `❌ <b>ผิดครับ</b> (คำตอบที่ถูกคือ: ${item.ans})<br>อธิบาย: ${item.exp}`;
+                    feedbackDiv.className = "feedback wrong";
+                }
+            } else {
+                feedbackDiv.innerHTML = `⚠️ <b>คุณยังไม่ได้ตอบข้อนี้</b> (คำตอบที่ถูกคือ: ${item.ans})<br>อธิบาย: ${item.exp}`;
+                feedbackDiv.className = "feedback wrong";
+            }
+        });
+
+        let resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = `🎉 คุณทำได้ <b>${score}</b> จาก <b>${selectedQuestions.length}</b> คะแนน!`;
+        resultDiv.classList.remove("hidden");
+        
+        document.getElementById("submit-btn").classList.add("hidden");
+        document.getElementById("reload-btn").classList.remove("hidden");
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+</script>
+
+</body>
+</html>
