@@ -32,6 +32,12 @@
             <p class="subtitle">ศูนย์สะสมข้อสอบและแบบทดสอบสำหรับทบทวนบทเรียน</p>
         </header>
 
+        <!-- Search Bar -->
+        <div class="search-container fade-in" style="animation-delay: 0.2s;">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="search-input" placeholder="ค้นหาวิชาหรือข้อสอบ...">
+        </div>
+
         <!-- Terms Container -->
         <main id="terms-container" class="terms-container">
             <!-- Sections Will Be Injected By app.js -->
@@ -40,6 +46,25 @@
         <footer>
             <p>&copy; 2026 รวมข้อสอบ BY 32 | Built for excellence</p>
         </footer>
+    </div>
+
+    <!-- AI Chatbot FAB & Window -->
+    <div class="ai-fab" id="ai-fab" title="ถามผู้ช่วย AI">
+        <i class="fa-solid fa-robot"></i>
+    </div>
+
+    <div class="ai-chat-window" id="ai-chat-window">
+        <div class="ai-header">
+            <span><i class="fa-solid fa-bolt"></i> ผู้ช่วย EE#32 AI</span>
+            <i class="fa-solid fa-xmark ai-close" id="ai-close"></i>
+        </div>
+        <div class="ai-messages" id="ai-messages">
+            <div class="ai-message bot">สวัสดีครับ! มีอะไรให้ผมช่วยอธิบายเรื่องวิศวกรรมไฟฟ้า หรือข้อสอบต่างๆ ไหมครับ? พิมพ์ถามมาได้เลยครับ ⚡</div>
+        </div>
+        <div class="ai-input-area">
+            <input type="text" id="ai-input" placeholder="พิมพ์คำถามของคุณที่นี่..." autocomplete="off">
+            <button id="ai-send" title="ส่ง"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
     </div>
 
     <script src="app.js"></script>
