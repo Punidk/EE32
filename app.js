@@ -34,7 +34,7 @@ const portalData = [
             {
                 title: "Electrical Machines by king sag",
                 url: "https://fuk-machine.vercel.app/",
-                icon: "fa-miacrochip",
+                icon: "fa-microchip",
                 description: "แบบทดสอบ กว. กลางภาค "
             }
             // Add more Term 3 links here...
