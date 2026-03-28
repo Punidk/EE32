@@ -2,23 +2,35 @@
 // You can easily add, edit, or remove links from this array.
 const portalData = [
     {
+        termName: "เนื้อหาและข้อสอบ วิชาอื่นๆ",
+        icon: "fa-book-open",
+        links: [
+            {
+                title: "Life Skill",
+                url: "./Life Skill/index.html",
+                icon: "fa-leaf",
+                description: "เอกสารและข้อสอบวิชาทักษะชีวิต (Life Skill)"
+            },
+            {
+                title: "Law (กฎหมาย)",
+                url: "./law/index.html",
+                icon: "fa-scale-balanced",
+                description: "เอกสารและข้อสอบวิชากฎหมาย (Law)"
+            }
+        ]
+    },
+    {
         termName: "เนื้อหาและข้อสอบ: เทอม 1",
         icon: "fa-book-open",
         links: [
-            // Add more Term 1 links here...
+
         ]
     },
     {
         termName: "เนื้อหาและข้อสอบ: เทอม 2",
         icon: "fa-layer-group",
         links: [
-            // Example placeholder
-            // {
-            //     title: "Subject Name",
-            //     url: "https://example.com",
-            //     icon: "fa-microchip",
-            //     description: "คำอธิบายรายละเอียดวิชา"
-            // }
+            // Add more Term 2 links here...
         ]
     },
     {
