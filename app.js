@@ -13,7 +13,7 @@ const portalData = [
             },
             {
                 title: "Law (กฎหมาย)",
-                url: "https://lawsut.tiiny.site",
+                url: "./law/index.html",
                 icon: "fa-scale-balanced",
                 description: "เอกสารและข้อสอบวิชากฎหมาย (Law)"
             }
