@@ -2,61 +2,64 @@
 // You can easily add, edit, or remove links from this array.
 const portalData = [
     {
-        termName: "เนื้อหาและข้อสอบ วิชาอื่นๆ",
-        icon: "fa-book-open",
-        links: [
+        categoryName: "วิชาหลัก (Main Subjects)",
+        icon: "fa-star",
+        subjects: [
             {
-                title: "Life Skill",
-                url: "./Life Skill/index.html",
-                icon: "fa-leaf",
-                description: "เอกสารและข้อสอบวิชาทักษะชีวิต (Life Skill)"
-            },
-            {
-                title: "Law (กฎหมาย)",
-                url: "./law/index.html",
-                icon: "fa-scale-balanced",
-                description: "เอกสารและข้อสอบวิชากฎหมาย (Law)"
-            }
-        ]
-    },
-    {
-        termName: "เนื้อหาและข้อสอบ: เทอม 1",
-        icon: "fa-book-open",
-        links: [
-
-        ]
-    },
-    {
-        termName: "เนื้อหาและข้อสอบ: เทอม 2",
-        icon: "fa-layer-group",
-        links: [
-            // Add more Term 2 links here...
-        ]
-    },
-    {
-        termName: "เนื้อหาและข้อสอบ: เทอม 3",
-        icon: "fa-laptop-code",
-        links: [
-            {
-                title: "Electrical Machines by Mai",
-                url: "https://machines.tiiny.site/",
+                subjectName: "Electrical Machines",
                 icon: "fa-bolt",
-                description: "แบบทดสอบ กว. กลางภาค (ถึงข้อที่ 220)"
+                links: [
+                    {
+                        title: "Electrical Machines by Mai",
+                        url: "https://machines.tiiny.site/",
+                        icon: "fa-file-lines",
+                        description: "แบบทดสอบ กว. กลางภาค (ถึงข้อที่ 220)"
+                    },
+                    {
+                        title: "Electrical Machines by king sag",
+                        url: "https://fuk-machine.vercel.app/",
+                        icon: "fa-microchip",
+                        description: "แบบทดสอบ กว. กลางภาค "
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        categoryName: "วิชารอง (Elective/Minor Subjects)",
+        icon: "fa-layer-group",
+        subjects: [
+            {
+                subjectName: "Life Skill",
+                icon: "fa-leaf",
+                links: [
+                    {
+                        title: "Life Skill Exams",
+                        url: "./Life Skill/index.html",
+                        icon: "fa-book-open",
+                        description: "เอกสารและข้อสอบวิชาทักษะชีวิต (Life Skill)"
+                    }
+                ]
             },
             {
-                title: "Electrical Machines by king sag",
-                url: "https://fuk-machine.vercel.app/",
-                icon: "fa-microchip",
-                description: "แบบทดสอบ กว. กลางภาค "
+                subjectName: "Law (กฎหมาย)",
+                icon: "fa-scale-balanced",
+                links: [
+                    {
+                        title: "Law Exams",
+                        url: "./law/index.html",
+                        icon: "fa-gavel",
+                        description: "เอกสารและข้อสอบวิชากฎหมาย (Law)"
+                    }
+                ]
             }
-            // Add more Term 3 links here...
         ]
     }
 ];
 
 // --- APP LOGIC ---
 document.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('terms-container');
+    const container = document.getElementById('categories-container');
     const searchInput = document.getElementById('search-input');
 
     function renderGrid(query = '') {
@@ -65,52 +68,100 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let hasAnyResults = false;
 
-        portalData.forEach((term, index) => {
-            // Filter links based on query
-            const filteredLinks = term.links.filter(link => 
-                link.title.toLowerCase().includes(lowerQuery) || 
-                (link.description && link.description.toLowerCase().includes(lowerQuery))
-            );
+        portalData.forEach((category, index) => {
+            // Filter nested subjects based on query
+            const matchingSubjects = category.subjects.map(subject => {
+                const filteredLinks = subject.links.filter(link =>
+                    link.title.toLowerCase().includes(lowerQuery) ||
+                    (link.description && link.description.toLowerCase().includes(lowerQuery))
+                );
+                return { ...subject, links: filteredLinks };
+            });
+
+            // Keep only subjects that have matching links (unless finding all if query is empty)
+            const activeSubjects = query === '' ? matchingSubjects : matchingSubjects.filter(sub => sub.links.length > 0);
 
             // Hide section if query is active and nothing matches
-            if (query !== '' && filteredLinks.length === 0) return;
+            if (query !== '' && activeSubjects.length === 0) return;
 
             hasAnyResults = true;
 
             const section = document.createElement('section');
-            section.className = 'term-section fade-in';
+            section.className = 'category-section fade-in';
             section.style.animationDelay = `${index * 0.1}s`;
 
             const titleEl = document.createElement('h2');
-            titleEl.className = 'term-title';
-            titleEl.innerHTML = `<i class="fa-solid ${term.icon}"></i> ${term.termName}`;
+            titleEl.className = 'category-title';
+            titleEl.innerHTML = `<i class="fa-solid ${category.icon}"></i> ${category.categoryName}`;
             section.appendChild(titleEl);
 
-            const grid = document.createElement('div');
-            grid.className = 'links-grid';
-
-            if (filteredLinks.length === 0 && query === '') {
-                grid.innerHTML = `<p style="color: var(--text-secondary); padding: 1rem; border: 1px dashed var(--border-glass); border-radius: 12px; text-align: center;">ยังไม่มีข้อสอบในเทอมนี้</p>`;
+            if (activeSubjects.length === 0) {
+                const emptyMsg = document.createElement('p');
+                emptyMsg.style = 'color: var(--text-secondary); padding: 1rem; border: 1px dashed var(--border-glass); border-radius: 12px; text-align: center;';
+                emptyMsg.textContent = 'ยังไม่มีข้อสอบในหมวดหมู่นี้';
+                section.appendChild(emptyMsg);
             } else {
-                filteredLinks.forEach(link => {
-                    const linkEl = document.createElement('a');
-                    linkEl.href = link.url;
-                    linkEl.className = 'link-card block';
-                    linkEl.target = '_blank';
+                activeSubjects.forEach(subject => {
+                    const subjectGroup = document.createElement('div');
+                    subjectGroup.className = 'subject-group';
 
-                    linkEl.innerHTML = `
-                        <div class="link-icon"><i class="fa-solid ${link.icon}"></i></div>
-                        <div class="link-content">
-                            <div class="link-title">${link.title}</div>
-                            <div class="link-desc">${link.description}</div>
-                        </div>
-                        <div class="link-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-                    `;
-                    grid.appendChild(linkEl);
+                    // Automatically open if actively searching
+                    const isSearching = query !== '';
+                    if (isSearching) {
+                        subjectGroup.classList.add('open');
+                    }
+
+                    const subjectTitle = document.createElement('h3');
+                    subjectTitle.className = 'subject-title';
+
+                    const titleLeft = document.createElement('div');
+                    titleLeft.innerHTML = `<i class="fa-solid ${subject.icon}"></i> ${subject.subjectName}`;
+                    titleLeft.style.display = 'flex';
+                    titleLeft.style.alignItems = 'center';
+                    titleLeft.style.gap = '0.6rem';
+
+                    const toggleIcon = document.createElement('i');
+                    toggleIcon.className = 'fa-solid fa-chevron-down toggle-icon';
+
+                    subjectTitle.appendChild(titleLeft);
+                    subjectTitle.appendChild(toggleIcon);
+                    subjectGroup.appendChild(subjectTitle);
+
+                    const contentWrap = document.createElement('div');
+                    contentWrap.className = 'subject-content';
+
+                    const grid = document.createElement('div');
+                    grid.className = 'links-grid';
+
+                    subject.links.forEach(link => {
+                        const linkEl = document.createElement('a');
+                        linkEl.href = link.url;
+                        linkEl.className = 'link-card block';
+                        linkEl.target = '_blank';
+
+                        linkEl.innerHTML = `
+                            <div class="link-icon"><i class="fa-solid ${link.icon}"></i></div>
+                            <div class="link-content">
+                                <div class="link-title">${link.title}</div>
+                                <div class="link-desc">${link.description}</div>
+                            </div>
+                            <div class="link-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                        `;
+                        grid.appendChild(linkEl);
+                    });
+
+                    contentWrap.appendChild(grid);
+                    subjectGroup.appendChild(contentWrap);
+
+                    // Accordion click handler
+                    subjectTitle.addEventListener('click', () => {
+                        subjectGroup.classList.toggle('open');
+                    });
+
+                    section.appendChild(subjectGroup);
                 });
             }
 
-            section.appendChild(grid);
             container.appendChild(section);
         });
 
@@ -125,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderGrid();
 
-    if(searchInput) {
+    if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             renderGrid(e.target.value);
         });
@@ -139,9 +190,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const aiSend = document.getElementById('ai-send');
     const aiMessages = document.getElementById('ai-messages');
 
-    // Using gemini-1.5-flash with safe quota boundary (avoid gemini-2.5-flash strict limits)
-    const API_KEY = "AIzaSyCC_uf2OfQPTpXw6v2zsM6bBf38WY4RKKs";
-    
+    // Using our own AI Backend API
+    const AI_BACKEND_URL = "http://127.0.0.1:8000/api/chat";
+
     // Toggle Window
     aiFab.addEventListener('click', () => {
         aiWindow.classList.add('active');
@@ -171,27 +222,24 @@ document.addEventListener('DOMContentLoaded', () => {
         aiSend.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+            // ส่งคำถามไปยัง AI Backend ของเรา
+            const response = await fetch(AI_BACKEND_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: `คุณคือผู้ช่วย AI ของกลุ่มนักศึกษา EE#32 คณะวิศวกรรมศาสตร์ ช่วยตอบคำถามเกี่ยวกับวิศวกรรมไฟฟ้าและกฎหมายทั่วไปอย่างสุภาพ เป็นมิตร และกระชับมากๆ คำถามคือ: ${text}`
-                        }]
-                    }]
+                    prompt: `คุณคือผู้ช่วย AI ของกลุ่มนักศึกษา EE#32 คณะวิศวกรรมศาสตร์ ช่วยตอบคำถามเกี่ยวกับวิศวกรรมไฟฟ้าและกฎหมายทั่วไปอย่างสุภาพ เป็นมิตร และกระชับมากๆ คำถามคือ: ${text}`
                 })
             });
 
-            if(!response.ok) throw new Error("API Limit exceeded or Network Error");
-            
+            if (!response.ok) throw new Error("Backend Error");
+
             const data = await response.json();
-            const botReply = data.candidates[0].content.parts[0].text;
+            const botReply = data.reply;
             addMessage(botReply, 'bot');
-            
+
         } catch (error) {
             console.error(error);
-            addMessage('ขออภัยครับ ขณะนี้ระบบขัดข้องหรือโควต้า AI อาจจะหมดชั่วคราว ลองใหม่ภายหลังนะครับ 😅', 'bot');
+            addMessage('ขออภัยครับ ไม่สามารถเชื่อมต่อกับ AI Backend ได้ โปรดตรวจสอบว่าเซิร์ฟเวอร์หลังบ้านกำลังทำงานอยู่ ⚡', 'bot');
         } finally {
             aiInput.disabled = false;
             aiSend.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
