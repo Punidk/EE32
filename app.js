@@ -3,16 +3,16 @@
 const portalData = [
     {
         categoryName: "วิชาหลัก (Main Subjects)",
-        icon: "fa-star",
+        icon: "fa-star-half-stroke",
         subjects: [
             {
                 subjectName: "Electrical Machines",
-                icon: "fa-bolt",
+                icon: "fa-bolt-lightning",
                 links: [
                     {
                         title: "Electrical Machines by Mai",
-                        url: "https://machines.tiiny.site/",
-                        icon: "fa-file-lines",
+                        url: "./electrical_machines_quiz/machine-quiz.html",
+                        icon: "fa-file-signature",
                         description: "แบบทดสอบ กว. กลางภาค (ถึงข้อที่ 220)"
                     },
                     {
@@ -31,12 +31,12 @@ const portalData = [
         subjects: [
             {
                 subjectName: "Life Skill",
-                icon: "fa-leaf",
+                icon: "fa-seedling",
                 links: [
                     {
                         title: "Life Skill Exams",
                         url: "./Life Skill/index.html",
-                        icon: "fa-book-open",
+                        icon: "fa-book-open-reader",
                         description: "เอกสารและข้อสอบวิชาทักษะชีวิต (Life Skill)"
                     }
                 ]
@@ -54,7 +54,79 @@ const portalData = [
                 ]
             }
         ]
-    }
+    },
+    {
+        categoryName: "เอกสาร PDF (PDF Files)",
+        icon: "fa-file-pdf",
+        subjects: [
+            {
+                subjectName: "Electrical Machines",
+                icon: "fa-plug-circle-bolt",
+                links: [
+                    {
+                        title: "Electrical Machines (กว)",
+                        url: "./electrical_machines_quiz/KW.pdf",
+                        icon: "fa-stamp",
+                        description: "PDF กว."
+                    },
+                    {
+                        title: "Electrical Machines (โจทย์)",
+                        url: "./electrical_machines_quiz/Machine Padej 2,4.pdf",
+                        icon: "fa-pencil",
+                        description: "โจทย์  "
+                    }
+                ]
+            },
+            {
+                subjectName: "Law (กฎหมาย)",
+                icon: "fa-building-columns",
+                links: [
+                    {
+                        title: "Law (PDF 1)",
+                        url: "./law/Law Content.pdf",
+                        icon: "fa-section",
+                        description: "เอกสารวิชากฎหมายที่ 1 (Law)"
+                    },
+                    {
+                        title: "Law (PDF 2)",
+                        url: "./law/Law Content2.pdf",
+                        icon: "fa-file-contract",
+                        description: "เอกสารวิชากฎหมายที่ 2 (Law)"
+                    }
+                ]
+            },
+            {
+                subjectName: "Art",
+                icon: "fa-palette",
+                links: [
+                    {
+                        title: "MIDTerm",
+                        url: "./Art App/midterm art_app.pdf",
+                        icon: "fa-paintbrush",
+                        description: "เอกสารArt"
+                    },
+                    {
+                        title: "Summary Art)",
+                        url: "./Art App/Summary Art.pdf",
+                        icon: "fa-image",
+                        description: "บ่รู้"
+                    }
+                ]
+            },
+            {
+                subjectName: "LAB EE",
+                icon: "fa-flask-vial",
+                links: [
+                    {
+                        title: "Quiz",
+                        url: "./EE LAB/Quiz_Lab-Elect.pdf",
+                        icon: "fa-microscope",
+                        description: "Quiz เด้อจ้ะ"
+                    }
+                ]
+            }
+        ]
+    },
 ];
 
 // --- APP LOGIC ---
