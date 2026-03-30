@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const aiMessages = document.getElementById('ai-messages');
 
     // Using our own AI Backend API
-    const AI_BACKEND_URL = "http://127.0.0.1:8000/api/chat";
+    const AI_BACKEND_URL = "https://ee-32-8ibyxd0xa-punidks-projects.vercel.app/";
 
     // Toggle Window
     aiFab.addEventListener('click', () => {
