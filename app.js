@@ -78,6 +78,18 @@ const portalData = [
                 ]
             },
             {
+                subjectName: "Heat And Fluid power",
+                icon: "fa-building-columns",
+                links: [
+                    {
+                        title: "Heat Mid (Mai)",
+                        url: "./Heat/heat_Mid.pdf",
+                        icon: "fa-section",
+                        description: "แนวข้อสอบ Heat กลางภาค"
+                    }
+                ]
+            },
+            {
                 subjectName: "Law (กฎหมาย)",
                 icon: "fa-building-columns",
                 links: [
