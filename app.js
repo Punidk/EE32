@@ -150,10 +150,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // วนลูปวาด ลิงก์ไฟล์ (เนื้อหาในชั้นที่ 2)
                 subjects[subjName].forEach(fileData => {
+                    let fileHref = fileData.url || '#';
+                    
+                    // ระบบ 'Path อ้างอิง': เช็คว่าถ้าไม่ได้ขึ้นต้นด้วย http ถือว่าเป็นไฟล์ใน Folder/GitHub
+                    if (!fileHref.toLowerCase().startsWith('http')) {
+                        // บังคับให้เป็น Relative Path เพื่อป้องกันลิงก์แตกตอนขึ้น GitHub Pages 
+                        // เช่น แปลง 'files/doc.pdf' หรือ '/files/doc.pdf' เป็น './files/doc.pdf'
+                        if (fileHref.startsWith('/')) {
+                            fileHref = '.' + fileHref;
+                        } else if (!fileHref.startsWith('./') && fileHref !== '#') {
+                            fileHref = './' + fileHref;
+                        }
+                    }
+
                     const linkEl = document.createElement('a');
-                    linkEl.href = fileData.url;
+                    linkEl.href = fileHref;
                     linkEl.className = 'link-card block';
-                    linkEl.target = '_blank';
+                    linkEl.target = '_blank'; // เปิดหน้าใหม่เสมอตามที่ขอ
                     linkEl.innerHTML = `
                         <div class="link-icon"><i class="fa-solid fa-link"></i></div>
                         <div class="link-content">
