@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - รวมข้อสอบ BY EE#32</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Admin Styles -->
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-sidebar">
+        <div class="brand">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>EE#32 Admin</span>
+        </div>
+        <nav class="admin-nav">
+            <a href="#news-section" class="active"><i class="fa-regular fa-newspaper"></i> ข่าวสาร</a>
+            <a href="#subject-section"><i class="fa-regular fa-folder-open"></i> รายวิชา/ไฟล์</a>
+        </nav>
+        <div class="logout-container">
+            <a href="index.html" class="back-home-btn"><i class="fa-solid fa-arrow-left"></i> กลับสู่หน้าเว็บหลัก</a>
+        </div>
+    </div>
+
+    <div class="admin-main">
+        <header class="admin-header">
+            <div class="header-content">
+                <h1>ระบบจัดการหลังบ้าน EE#32</h1>
+                <p>ยินดีต้อนรับเข้าสู่งานผู้ดูแลระบบ</p>
+            </div>
+            <div class="admin-avatar">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <!-- News Section -->
+            <section id="news-section" class="admin-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-bullhorn"></i> เพิ่มข่าวสาร (Add News)</h2>
+                </div>
+                <div class="card-body">
+                    <form id="news-form">
+                        <div class="form-group">
+                            <label for="news-title">หัวข้อข่าว (Title)</label>
+                            <input type="text" id="news-title" placeholder="เช่น แจ้งกำหนดการสอบมิดเทอม" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="news-detail">เนื้อหาข่าว (Detail)</label>
+                            <textarea id="news-detail" rows="4" placeholder="รายละเอียดข่าวสาร..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="news-author">ชื่อผู้ประกาศข่าว (Posted By)</label>
+                            <input type="text" id="news-author" placeholder="เช่น ประธานชั้นปี" required>
+                        </div>
+                        <button type="submit" class="submit-btn"><i class="fa-solid fa-paper-plane"></i> อัปเดตข่าวสาร</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Subject Section -->
+            <section id="subject-section" class="admin-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-folder-plus"></i> เพิ่มรายวิชา/ไฟล์แนบ (Add Subject/Resource)</h2>
+                </div>
+                <div class="card-body">
+                    <form id="subject-form">
+                        <div class="form-group">
+                            <label for="subject-category">หมวดหมู่หลัก (Category)</label>
+                            <select id="subject-category" required>
+                                <option value="" disabled selected>เลือกหมวดหมู่</option>
+                                <option value="EE">วิชาหลัก (Main Subjects - EE)</option>
+                                <option value="GE">วิชารอง (Elective Subjects - GE)</option>
+                                <option value="LAB">ปฏิบัติการ (Laboratory - LAB)</option>
+                                <option value="PDF">เอกสารชีท (PDF Document)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject-name">ชื่อวิชา (Subject)</label>
+                            <input type="text" id="subject-name" placeholder="เช่น Electrical Machines" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject-author">ชื่อผู้เขียน/ทำสรุป (Author/Title)</label>
+                            <input type="text" id="subject-author" placeholder="เช่น สรุปโดย Mai" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject-url">ลิงก์ไฟล์ หรือ แบบทดสอบ (File URL)</label>
+                            <input type="url" id="subject-url" placeholder="https://..." required>
+                        </div>
+                        <button type="submit" class="submit-btn btn-success"><i class="fa-solid fa-plus"></i> เพิ่มข้อมูล</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

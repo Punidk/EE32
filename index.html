@@ -38,14 +38,52 @@
             <input type="text" id="search-input" placeholder="ค้นหาวิชาหรือข้อสอบ...">
         </div>
 
-        <!-- Categories Container -->
-        <main id="categories-container" class="categories-container">
-            <!-- Sections Will Be Injected By app.js -->
-        </main>
+        <!-- Main Layout Structure -->
+        <div class="main-layout">
+            <!-- Left Sidebar (Accordion Menu) -->
+            <aside id="categories-container" class="categories-container">
+                <!-- Sections Will Be Injected By app.js -->
+            </aside>
+
+            <!-- Main Content (News Feed) -->
+            <main class="news-feed-container fade-in" style="animation-delay: 0.3s;">
+                <div class="news-feed-header">
+                    <h2><i class="fa-regular fa-newspaper"></i> ข่าวสารสาขา (News Feed)</h2>
+                </div>
+                <div class="news-feed-content">
+                    <div class="news-card">
+                        <h3><i class="fa-solid fa-bullhorn" style="color: var(--accent-1);"></i> ยินดีต้อนรับสู่โฉมใหม่ของ EE#32 Hub! ⚡</h3>
+                        <p>อัปเดตหน้าเว็บใหม่เรียบร้อย ปรับ Layout ให้ใช้งานง่ายและสบายตามากยิ่งขึ้น คุณสามารถเลือกดูวิชาต่างๆ และข้อสอบได้ที่เมนูด้านซ้าย และติดตามข่าวสารจากสาขาได้ที่นี่เลย!</p>
+                        <span class="news-date">10 เม.ย. 2026</span>
+                    </div>
+                </div>
+            </main>
+        </div>
 
         <footer>
             <p>&copy; 2026 รวมข้อสอบ BY 32 | Built for excellence</p>
         </footer>
+    </div>
+
+    <!-- Admin Login Button -->
+    <div id="admin-btn" class="admin-btn" title="Admin Mode">
+        <i class="fa-solid fa-gear"></i>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-modal" class="admin-modal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h3><i class="fa-solid fa-lock"></i> Admin Authentication</h3>
+                <i class="fa-solid fa-xmark admin-close" id="admin-close"></i>
+            </div>
+            <div class="admin-modal-body">
+                <p>Please enter the administrator password.</p>
+                <input type="password" id="admin-password" placeholder="Password...">
+                <p id="admin-error" class="admin-error" style="display: none;">รหัสผ่านไม่ถูกต้อง</p>
+                <button id="admin-submit" class="admin-submit-btn">Login</button>
+            </div>
+        </div>
     </div>
 
     <!-- AI Chatbot FAB & Window -->

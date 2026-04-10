@@ -172,24 +172,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const section = document.createElement('section');
             section.className = 'category-section fade-in';
+            
+            // Open the first category by default, or open all if searching
+            const isSearching = query !== '';
+            if (isSearching || index === 0) {
+                section.classList.add('open');
+            }
+            
             section.style.animationDelay = `${index * 0.1}s`;
 
             const titleEl = document.createElement('h2');
             titleEl.className = 'category-title';
-            titleEl.innerHTML = `<i class="fa-solid ${category.icon}"></i> ${category.categoryName}`;
+
+            const titleLeft = document.createElement('div');
+            titleLeft.innerHTML = `<i class="fa-solid ${category.icon}"></i> ${category.categoryName}`;
+            titleLeft.style.display = 'flex';
+            titleLeft.style.alignItems = 'center';
+            titleLeft.style.gap = '0.75rem';
+
+            const toggleIcon = document.createElement('i');
+            toggleIcon.className = 'fa-solid fa-chevron-down toggle-icon';
+
+            titleEl.appendChild(titleLeft);
+            titleEl.appendChild(toggleIcon);
             section.appendChild(titleEl);
+
+            const contentWrap = document.createElement('div');
+            contentWrap.className = 'category-content-wrap';
+
+            const contentInner = document.createElement('div');
+            contentInner.className = 'category-content-inner';
 
             if (activeSubjects.length === 0) {
                 const emptyMsg = document.createElement('p');
                 emptyMsg.style = 'color: var(--text-secondary); padding: 1rem; border: 1px dashed var(--border-glass); border-radius: 12px; text-align: center;';
                 emptyMsg.textContent = 'ยังไม่มีข้อสอบในหมวดหมู่นี้';
-                section.appendChild(emptyMsg);
+                contentInner.appendChild(emptyMsg);
             } else {
                 activeSubjects.forEach(subject => {
                     const subjectGroup = document.createElement('div');
                     subjectGroup.className = 'subject-group';
 
-                    // Automatically open if actively searching
                     const isSearching = query !== '';
                     if (isSearching) {
                         subjectGroup.classList.add('open');
@@ -211,8 +234,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     subjectTitle.appendChild(toggleIcon);
                     subjectGroup.appendChild(subjectTitle);
 
-                    const contentWrap = document.createElement('div');
-                    contentWrap.className = 'subject-content';
+                    const subjectContentWrap = document.createElement('div');
+                    subjectContentWrap.className = 'subject-content-wrap';
 
                     const grid = document.createElement('div');
                     grid.className = 'links-grid';
@@ -234,17 +257,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         grid.appendChild(linkEl);
                     });
 
-                    contentWrap.appendChild(grid);
-                    subjectGroup.appendChild(contentWrap);
+                    subjectContentWrap.appendChild(grid);
+                    subjectGroup.appendChild(subjectContentWrap);
+                    contentInner.appendChild(subjectGroup);
 
-                    // Accordion click handler
-                    subjectTitle.addEventListener('click', () => {
+                    // Accordion click handler for Level 2 (Subjects)
+                    subjectTitle.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         subjectGroup.classList.toggle('open');
                     });
-
-                    section.appendChild(subjectGroup);
                 });
             }
+
+            contentWrap.appendChild(contentInner);
+            section.appendChild(contentWrap);
+
+            // Accordion click handler
+            titleEl.addEventListener('click', () => {
+                section.classList.toggle('open');
+            });
 
             container.appendChild(section);
         });
@@ -335,4 +366,42 @@ document.addEventListener('DOMContentLoaded', () => {
     aiInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleSend();
     });
+
+    // --- ADMIN MODE LOGIC ---
+    const adminBtn = document.getElementById('admin-btn');
+    const adminModal = document.getElementById('admin-modal');
+    const adminClose = document.getElementById('admin-close');
+    const adminPassword = document.getElementById('admin-password');
+    const adminSubmit = document.getElementById('admin-submit');
+    const adminError = document.getElementById('admin-error');
+
+    if (adminBtn) {
+        adminBtn.addEventListener('click', () => {
+            adminModal.classList.add('active');
+            adminPassword.value = '';
+            adminError.style.display = 'none';
+            setTimeout(() => adminPassword.focus(), 100);
+        });
+
+        adminClose.addEventListener('click', () => {
+            adminModal.classList.remove('active');
+        });
+
+        const checkAdminPassword = () => {
+            if (adminPassword.value === 'ee32admin') {
+                window.location.href = 'admin.html';
+            } else {
+                adminError.style.display = 'block';
+                adminPassword.style.borderColor = '#ef4444';
+                setTimeout(() => {
+                    adminPassword.style.borderColor = 'var(--border-glass)';
+                }, 2000);
+            }
+        };
+
+        adminSubmit.addEventListener('click', checkAdminPassword);
+        adminPassword.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkAdminPassword();
+        });
+    }
 });
