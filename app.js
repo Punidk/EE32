@@ -227,9 +227,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- AI Chat Logic Support (Optional placeholder so it doesn't break) ---
+    // --- AI Chat Logic Support ---
+    const aiFab = document.getElementById('ai-fab');
+    const aiWindow = document.getElementById('ai-chat-window');
+    const aiClose = document.getElementById('ai-close');
     const aiSend = document.getElementById('ai-send');
-    if (aiSend) {
-        // Logic เก่ายังอยู่ครบถ้วนในไฟล์ HTML แต่ไม่ต้องผูก Event ตรงนี้หากไม่จำเป็น หรือผูกไว้หากต้องการใช้งาน
+    const aiInput = document.getElementById('ai-input');
+    const aiMessages = document.getElementById('ai-messages');
+
+    if (aiFab && aiWindow) {
+        // Toggle เปิด/ปิด แชท
+        aiFab.addEventListener('click', () => {
+            aiWindow.classList.add('active');
+            aiFab.style.transform = 'scale(0)'; // ซ่อนปุ่มหุ่นยนต์ตอนที่แชทเปิดอยู่
+            setTimeout(() => aiInput.focus(), 200);
+        });
+
+        // ปุ่ม X สำหรับปิดหน้าต่างแชท
+        aiClose.addEventListener('click', () => {
+            aiWindow.classList.remove('active');
+            aiFab.style.transform = 'scale(1)'; // แสดงปุ่มหุ่นยนต์กลับมา
+        });
+
+        // ฟังก์ชันวาดกล่องข้อความ
+        const addMessage = (text, isUser = false) => {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `ai-message ${isUser ? 'user' : 'bot'} fade-in`;
+            msgDiv.textContent = text;
+            aiMessages.appendChild(msgDiv);
+            aiMessages.scrollTop = aiMessages.scrollHeight; // Auto-scroll ลงล่างสุด
+        };
+
+        // ฟังก์ชันกดส่งข้อความ
+        const handleSend = () => {
+            const text = aiInput.value.trim();
+            if (!text) return;
+            
+            addMessage(text, true); // แสดงฝั่งผู้ใช้ (User)
+            aiInput.value = '';
+            
+            // Disable ปุ่มป้องกันสแปม
+            const oldHtml = aiSend.innerHTML;
+            aiSend.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            aiInput.disabled = true;
+
+            // ตัวอย่าง: จำลองการรอคำตอบ 1 วินาที (สามารถนำไปเปลี่ยนเป็น Fetch AI API ได้เลย)
+            setTimeout(() => {
+                addMessage("ระบบ AI Backend ของเรากำลังอยู่ระหว่างพัฒนาครับ จะรีบประกอบกลับมาให้ไวที่สุด ⚡🤖", false);
+                aiSend.innerHTML = oldHtml;
+                aiInput.disabled = false;
+                aiInput.focus();
+            }, 1000);
+        };
+
+        aiSend.addEventListener('click', handleSend);
+        aiInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
     }
 });
