@@ -97,6 +97,104 @@
                     </form>
                 </div>
             </section>
+
+            <!-- Manage News Section -->
+            <section id="manage-news-section" class="admin-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-list-check"></i> จัดการข่าวสาร (Manage News)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>หัวข้อข่าว (Title)</th>
+                                    <th>ผู้ประกาศ (Author)</th>
+                                    <th>วันที่เพิ่ม (Date)</th>
+                                    <th class="text-right">จัดการ (Actions)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="news-table-body">
+                                <!-- Hardcoded Mock Data -->
+                                <tr>
+                                    <td>แจ้งกำหนดการสอบมิดเทอมภาคการศึกษาที่ 1</td>
+                                    <td>ประธานชั้นปี</td>
+                                    <td>10 เม.ย. 2026</td>
+                                    <td class="text-right">
+                                        <button class="delete-btn" data-id="news-001" data-category="news" title="ลบข้อมูล">
+                                            <i class="fa-solid fa-trash-can"></i> ลบ
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ยินดีต้อนรับสู่โฉมใหม่ของ EE#32 Hub!</td>
+                                    <td>Admin</td>
+                                    <td>08 เม.ย. 2026</td>
+                                    <td class="text-right">
+                                        <button class="delete-btn" data-id="news-002" data-category="news" title="ลบข้อมูล">
+                                            <i class="fa-solid fa-trash-can"></i> ลบ
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Manage Subjects Section -->
+            <section id="manage-subjects-section" class="admin-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-swatchbook"></i> จัดการรายวิชา/ไฟล์ (Manage Subjects)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ชื่อวิชา (Subject)</th>
+                                    <th>หมวดหมู่ (Category)</th>
+                                    <th>ผู้เขียน/สรุป (Author)</th>
+                                    <th class="text-right">จัดการ (Actions)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subjects-table-body">
+                                <!-- Hardcoded Mock Data -->
+                                <tr>
+                                    <td>Electrical Machines by Mai</td>
+                                    <td><span class="badge badge-ee">EE</span></td>
+                                    <td>Mai</td>
+                                    <td class="text-right">
+                                        <button class="delete-btn" data-id="subj-101" data-category="subjects" title="ลบข้อมูล">
+                                            <i class="fa-solid fa-trash-can"></i> ลบ
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Law Exams (กฎหมาย)</td>
+                                    <td><span class="badge badge-ge">GE</span></td>
+                                    <td>ไม่ระบุ</td>
+                                    <td class="text-right">
+                                        <button class="delete-btn" data-id="subj-102" data-category="subjects" title="ลบข้อมูล">
+                                            <i class="fa-solid fa-trash-can"></i> ลบ
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Quiz LAB EE</td>
+                                    <td><span class="badge badge-lab">LAB</span></td>
+                                    <td>Ajarn</td>
+                                    <td class="text-right">
+                                        <button class="delete-btn" data-id="subj-103" data-category="subjects" title="ลบข้อมูล">
+                                            <i class="fa-solid fa-trash-can"></i> ลบ
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 

@@ -63,4 +63,34 @@ document.addEventListener('DOMContentLoaded', () => {
         // Reset the form fields
         subjectForm.reset();
     });
+
+    // --- Data Management (Delete Actions) ---
+    // In a real app, you would fetch these elements dynamically after rendering from Firebase.
+    // For now we attach listeners to the hardcoded buttons.
+    
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = e.currentTarget.getAttribute('data-id');
+            const category = e.currentTarget.getAttribute('data-category');
+            
+            // Confirm Dialog
+            const confirmDelete = confirm('คุณแน่ใจหรือไม่ที่จะลบข้อมูลนี้?');
+            
+            if (confirmDelete) {
+                // If OK
+                console.log(`=== [FIREBASE DELETE] กำลังลบข้อมูล ID: ${id} จากหมวดหมู่: ${category} ===`);
+                
+                // Visual feedback for mock UI: animate and remove the row
+                const row = e.currentTarget.closest('tr');
+                if (row) {
+                    row.style.transition = "all 0.3s ease";
+                    row.style.opacity = "0";
+                    setTimeout(() => {
+                        row.remove();
+                    }, 300);
+                }
+            }
+            // If Cancel, do nothing.
+        });
+    });
 });
