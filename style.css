@@ -654,16 +654,16 @@ footer {
 /* --- Admin Mode --- */
 .admin-btn {
   position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
+  bottom: 2rem;
+  right: 6.5rem; /* วางไว้ข้างๆ ปุ่ม AI */
   color: var(--text-secondary);
   opacity: 0.15;
   font-size: 1.3rem;
   cursor: pointer;
   z-index: 1000;
   transition: all 0.3s ease;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
