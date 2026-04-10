@@ -152,21 +152,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 subjects[subjName].forEach(fileData => {
                     let fileHref = fileData.url || '#';
                     
-                    // ระบบ 'Path อ้างอิง': เช็คว่าถ้าไม่ได้ขึ้นต้นด้วย http ถือว่าเป็นไฟล์ใน Folder/GitHub
-                    if (!fileHref.toLowerCase().startsWith('http')) {
-                        // บังคับให้เป็น Relative Path เพื่อป้องกันลิงก์แตกตอนขึ้น GitHub Pages 
-                        // เช่น แปลง 'files/doc.pdf' หรือ '/files/doc.pdf' เป็น './files/doc.pdf'
-                        if (fileHref.startsWith('/')) {
-                            fileHref = '.' + fileHref;
-                        } else if (!fileHref.startsWith('./') && fileHref !== '#') {
-                            fileHref = './' + fileHref;
-                        }
-                    }
+                    // ระบบ 'Smart Path': 
+                    // - ถ้าขึ้นด้วย http บราวเซอร์จะพุ่งไปที่ลิงก์ปลายทางโดยตรง
+                    // - ถ้าไม่ขึ้นด้วย http (เช่น docs/lab1.pdf) บราวเซอร์จะนำไปต่อท้าย Root ของเว็บให้อัตโนมัติ กลายเป็น Local Path ทันที
 
                     const linkEl = document.createElement('a');
                     linkEl.href = fileHref;
                     linkEl.className = 'link-card block';
-                    linkEl.target = '_blank'; // เปิดหน้าใหม่เสมอตามที่ขอ
+                    linkEl.target = '_blank'; // บังคับเปิดแท็บใหม่เสมอ 100% ตามเงื่อนไข
                     linkEl.innerHTML = `
                         <div class="link-icon"><i class="fa-solid fa-link"></i></div>
                         <div class="link-content">
